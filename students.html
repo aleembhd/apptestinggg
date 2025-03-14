@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Student Roll Numbers and Names</title>
+
+  <style>
+
+    /* Table Styles */
+
+    /* General Styles */
+
+body {
+
+  margin: 0;
+
+  padding: 20px;
+
+  font-family: Arial, sans-serif;
+
+  background-color: #f9f9f9;
+
+}
+
+
+
+/* Table Styles */
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  border-radius: 5px;
+
+  overflow: hidden; /* Ensures rounded corners */
+
+}
+
+
+
+th, td {
+
+  padding: 15px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #ddd;
+
+}
+
+
+
+th {
+
+  background-color: #007BFF; /* Primary color */
+
+  color: white;
+
+  font-weight: bold;
+
+}
+
+
+
+tr:hover {
+
+  background-color: #f1f1f1; /* Light gray on hover */
+
+}
+
+
+
+/* Responsive Styles */
+
+@media (max-width: 767px) {
+
+  table {
+
+    font-size: 14px;
+
+  }
+
+
+
+  th, td {
+
+    padding: 12px;
+
+  }
+
+}
+
+
+
+@media (max-width: 480px) {
+
+  table {
+
+    font-size: 12px;
+
+  }
+
+
+
+  th, td {
+
+    padding: 10px;
+
+  }
+
+}
+
+/* Add new container styles */
+.table-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    overflow-y: auto;
+    background: #ffffff;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+/* Header styles */
+th {
+    position: sticky;
+    top: 0;
+    background-color: #007BFF;
+    color: white;
+    font-size: 28px;  /* Increased header size */
+    padding: 25px 15px;
+    text-align: left;
+    font-weight: 600;
+    z-index: 1;
+}
+
+/* Column styles */
+th:first-child {
+    width: 40%;
+}
+
+th:last-child {
+    width: 60%;
+}
+
+/* Cell styles */
+td {
+    padding: 25px 15px;
+    font-size: 26px;  /* Increased cell text size */
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Mobile specific styles */
+@media (max-width: 767px) {
+    /* Roll Number column */
+    td:first-child {
+        color: #000;
+        font-weight: 500;
+        font-size: 26px;  /* Increased roll number size */
+    }
+    
+    /* Name column */
+    td:last-child {
+        color: #000;
+        font-size: 26px;  /* Increased name size */
+    }
+    
+    /* Row sizing */
+    tr {
+        height: calc((100vh - 120px) / 8); /* Showing fewer rows due to larger text */
+        min-height: 100px; /* Increased minimum height */
+    }
+    
+    /* Header text */
+    th {
+        font-size: 28px;  /* Increased header size */
+        padding: 20px 15px;
+    }
+    
+    /* Cell text handling */
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 15px;
+        line-height: 100px; /* Match with min-height */
+    }
+}
+
+/* Zebra striping */
+tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+  </style>
+
+  <!-- Existing meta tags -->
+
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+  <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+
+  <link rel="apple-touch-icon" href="images/favicon.ico">
+
+</head>
+
+<body>
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Roll Number</th>
+
+          <th>Name</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>22WJ1A04R7</td>
+          <td>SANDYAPAGA RAJU</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04R8</td>
+          <td>SARAN KUMAR KHADKA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04R9</td>
+          <td>SEELAM MAMATHA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T0</td>
+          <td>SEEPATHI DEEKSHITH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T1</td>
+          <td>SHAIK ABDUL ALEEM</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T2</td>
+          <td>SHAIK ABDUL SAMAD</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T4</td>
+          <td>SHAIK AMEESHA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T5</td>
+          <td>SHAIK AYAAZ</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T6</td>
+          <td>SHAIK NASIMA BEGUM</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T7</td>
+          <td>SHAIK RAFI</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T8</td>
+          <td>SHAIK SAIFAN</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04T9</td>
+          <td>SHAIK SAJITHA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U1</td>
+          <td>SHETTI AVINASH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U2</td>
+          <td>SHIVANNAGARI NAVYA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U3</td>
+          <td>SHYAMALA RAMYA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U4</td>
+          <td>SIDDI SHIVA PRASAD</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U5</td>
+          <td>SIRIGIRI MANISHA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U6</td>
+          <td>SIRIGIRI SRIKAR REDDY</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U7</td>
+          <td>SIRIMALLE PAVAN KUMAR</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U8</td>
+          <td>SOUDALA SANDEEP</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04U9</td>
+          <td>SRIPATHI YUGENDER REDDY</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V0</td>
+          <td>SUDI SRINIVAS</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V1</td>
+          <td>SUKHVINDERSINGH NAWAB</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V3</td>
+          <td>SURA DIVYA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V4</td>
+          <td>SURA RISHINADH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V5</td>
+          <td>T TEJA NAIDU</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V6</td>
+          <td>TALARI UDAY KIRAN</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V7</td>
+          <td>TALUGONDA SAI DINESH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V8</td>
+          <td>TEDDU UDAY KUMAR</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04V9</td>
+          <td>THADAGONI THARUN GOUD</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W0</td>
+          <td>THADEM KRISHNA KARTHIK</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W1</td>
+          <td>THADISHETTI SHIVA PRASAD</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W2</td>
+          <td>THAMMINENI YAMUNA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W3</td>
+          <td>THOTA ANUSHA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W4</td>
+          <td>TIRUNAGARI PUSHPA SHREE</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W5</td>
+          <td>UPADHYAYULA VYSHNAVI</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W6</td>
+          <td>UPPARI SHUBHAM SAGAR</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W7</td>
+          <td>KHATROTH SUCHITRA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W8</td>
+          <td>V RAJESHWAR REDDY</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04W9</td>
+          <td>V SRAVANI</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X0</td>
+          <td>VADITYA SATISH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X1</td>
+          <td>VADTHYAVATH SIDDU</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X2</td>
+          <td>VALLAPU SANDEEP</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X3</td>
+          <td>VALLOJU KARTHIK</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X4</td>
+          <td>VARAKANTHAM SREE VARSHITH REDDY</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X5</td>
+          <td>VARTYAVATH PRAVEEN KUMAR</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X6</td>
+          <td>VEEREDDY NAVYA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X7</td>
+          <td>VELJARLA HARISH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X8</td>
+          <td>VELPULA KARTHIK</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04X9</td>
+          <td>VEMIREDDY YASHWANTH SAI</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y0</td>
+          <td>VEMULA RAJESH</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y1</td>
+          <td>VEMULA SAKETH GOUD</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y2</td>
+          <td>VODNALA LASYAPRIYA</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y3</td>
+          <td>WANAPARTHI MADHU KUMAR</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y4</td>
+          <td>YADARI RAMANJANEYULU</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y7</td>
+          <td>NETHALA KAVERI</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Y8</td>
+          <td>YAMPALLA HARISH KUMAR REDDY</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Z0</td>
+          <td>AVULA SHIVAJI</td>
+        </tr>
+        <tr>
+          <td>22WJ1A04Z1</td>
+          <td>KONIDINA VEERA NAGA SANTHOSH</td>
+        </tr>
+        <tr>
+          <td>21WJ1A0455</td>
+          <td>CHENNURI SAI TEJA</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0427</td>
+          <td>SOUDOJU UDAY KIRAN</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0428</td>
+          <td>TEKUMATLA SRIVIDYA</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0429</td>
+          <td>THATIKANTI NAVEENKUMAR</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0430</td>
+          <td>THUDUM VIDHYA</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0431</td>
+          <td>VADDE SANDEEP</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0432</td>
+          <td>VARANASI CHARAN RAJ</td>
+        </tr>
+        <tr>
+          <td>23WJ5A0433</td>
+          <td>YANAM JHANSI RANI</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="bottom-navbar">
+    <!-- ... existing navigation ... -->
+  </div>
+
+  <script>
+
+    function openStudentsPage() {
+
+  window.open('students.html', '_blank');
+
+}
+
+
+
+// Add this to your existing DOMContentLoaded event listener
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ... your existing code ...
+
+
+
+  // Add event listener for the Students button
+
+  document.getElementById('studentsBtn').addEventListener('click', openStudentsPage);
+
+});
+
+  </script>
+
+</body>
+
+</html>
+
+
