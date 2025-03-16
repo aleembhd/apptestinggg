@@ -327,6 +327,10 @@ const students = [
              messages.push(message);
            }
          });
+         
+         // Sort messages by timestamp (newest first)
+         messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+         
          return messages;
        });
    }
