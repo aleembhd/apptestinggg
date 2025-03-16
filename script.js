@@ -70,15 +70,19 @@ const students = [
    
    let messageLogs = [];
    
+   // FACULTY CONFIGURATION
+   // Change this value when deploying to a different faculty
+   const FACULTY_NAME = "y_srinivasa_rao";
+   const DISPLAY_FACULTY_NAME = "Y. Srinivasa Rao";
+   
    // Firebase configuration
    const firebaseConfig = {
-    apiKey: "AIzaSyAAJ8eWUiAE85FmVpbHinlk0_FVGV3JsMQ",
-    authDomain: "ramya-madam-2nd-year-section-2.firebaseapp.com",
-    databaseURL: "https://ramya-madam-2nd-year-section-2-default-rtdb.firebaseio.com",
-    projectId: "ramya-madam-2nd-year-section-2",
-    storageBucket: "ramya-madam-2nd-year-section-2.appspot.com",
-    messagingSenderId: "353573683497",
-    appId: "1:353573683497:web:9453c19843a0b1db7df738"
+    apiKey: "AIzaSyCs1Wgew-Y1hcY8xIUm9uFagdeByDTDGU0",
+    authDomain: "collegeapp-59309.firebaseapp.com",
+    projectId: "collegeapp-59309",
+    storageBucket: "collegeapp-59309.firebasestorage.app",
+    messagingSenderId: "298826677970",
+    appId: "1:298826677970:web:3989fed84dd5bb4d73f70b"
   };
   
    
@@ -91,10 +95,11 @@ const students = [
    // Replace localStorageDatabase with firebaseDatabase
    const firebaseDatabase = {
      saveMessage: function (log) {
-       return database.ref('messageLogs').push(log);
+       // Always save under the configured faculty name
+       return database.ref(`faculty/${FACULTY_NAME}`).push(log);
      },
      getAllMessages: function () {
-       return database.ref('messageLogs').once('value')
+       return database.ref(`faculty/${FACULTY_NAME}`).once('value')
          .then(snapshot => {
            const messages = [];
            snapshot.forEach(childSnapshot => {
@@ -107,7 +112,7 @@ const students = [
        const oneMonthAgo = new Date();
        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
        
-       return database.ref('messageLogs').once('value')
+       return database.ref(`faculty/${FACULTY_NAME}`).once('value')
          .then(snapshot => {
            const updates = {};
            snapshot.forEach(childSnapshot => {
@@ -116,11 +121,11 @@ const students = [
                updates[childSnapshot.key] = null;
              }
            });
-           return database.ref('messageLogs').update(updates);
+           return database.ref(`faculty/${FACULTY_NAME}`).update(updates);
          });
      },
      clearAllLogs: function () {
-       return database.ref('messageLogs').remove();
+       return database.ref(`faculty/${FACULTY_NAME}`).remove();
      }
    };
    
@@ -301,29 +306,30 @@ const students = [
    }
    
    function filterData() {
-    const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(document.getElementById('endDate').value);
-    endDate.setHours(23, 59, 59, 999); // Set to end of day
+     const startDate = new Date(document.getElementById('startDate').value);
+     const endDate = new Date(document.getElementById('endDate').value);
+     endDate.setHours(23, 59, 59, 999); // Set to end of day
 
-    return firebase.database().ref('messageLogs').once('value')
-      .then(snapshot => {
-        const messages = [];
-        snapshot.forEach(childSnapshot => {
-          const message = childSnapshot.val();
-          const messageDate = new Date(message.timestamp);
-          
-          // Ensure recipient is always 10 digits
-          if (message.recipient && message.recipient.startsWith('+91')) {
-            message.recipient = message.recipient.slice(3);
-          }
-          
-          if (messageDate >= startDate && messageDate <= endDate) {
-            messages.push(message);
-          }
-        });
-        return messages;
-      });
-  }
+     // Change this to use faculty-specific path
+     return firebase.database().ref(`faculty/${FACULTY_NAME}`).once('value')
+       .then(snapshot => {
+         const messages = [];
+         snapshot.forEach(childSnapshot => {
+           const message = childSnapshot.val();
+           const messageDate = new Date(message.timestamp);
+           
+           // Ensure recipient is always 10 digits
+           if (message.recipient && message.recipient.startsWith('+91')) {
+             message.recipient = message.recipient.slice(3);
+           }
+           
+           if (messageDate >= startDate && messageDate <= endDate) {
+             messages.push(message);
+           }
+         });
+         return messages;
+       });
+   }
    
    function generatePrintableTable(data) {
     let tableHtml = `
@@ -585,7 +591,7 @@ const students = [
            
            // Log the call
            const log = {
-             sender: 'Y.Srinivasa Rao',
+             sender: DISPLAY_FACULTY_NAME,
              recipient: parentPhone,
              studentName: studentName,
              studentRoll: studentRoll,
@@ -637,7 +643,7 @@ const students = [
        
        // Log the WhatsApp message
        const log = {
-         sender: 'Y.Srinivasa Rao',
+         sender: DISPLAY_FACULTY_NAME,
          recipient: formattedPhone,
          studentName: studentName,
          studentRoll: studentRoll,
@@ -670,7 +676,7 @@ const students = [
        
        // Log the custom WhatsApp message
        const log = {
-         sender: 'Y.Srinivasa Rao',
+         sender: DISPLAY_FACULTY_NAME,
          recipient: formattedPhone,
          studentName: studentName,
          studentRoll: studentRoll,
@@ -781,7 +787,7 @@ const students = [
    
      // Log the bulk message to Firebase
      const bulkLog = {
-       sender: 'Y.Srinivasa Rao',
+       sender: DISPLAY_FACULTY_NAME,
        recipients: parentPhones,
        message: message,
        timestamp: new Date().toISOString(),
@@ -799,7 +805,7 @@ const students = [
      parentPhones.forEach(phone => {
        const student = students.find(s => s.parentPhone === phone);
        const log = {
-         sender: 'Y.Srinivasa Rao',
+         sender: DISPLAY_FACULTY_NAME,
          recipient: phone,
          studentName: student ? student.name : 'N/A',
          studentRoll: student ? student.rollNumber : 'N/A',
@@ -909,42 +915,47 @@ function updateActiveTab(activeTab) {
   }
 }
 
-// Load message logs from storage or database
+// Load message logs from Firebase
 function loadMessageLogs() {
   const logsContainer = document.getElementById('logsContent');
   
   // Clear existing logs display
   logsContainer.innerHTML = '';
   
-  // Get logs from localStorage (or your database)
-  const logs = JSON.parse(localStorage.getItem('messageLogs')) || [];
-  
-  if (logs.length === 0) {
-    // Display a message if no logs exist
-    logsContainer.innerHTML = '<p class="no-logs">No message logs found.</p>';
-    return;
-  }
-  
-  // Sort logs by timestamp (newest first)
-  logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  
-  // Create log entries
-  logs.forEach(log => {
-    const logEntry = document.createElement('div');
-    logEntry.className = 'log-entry';
-    
-    const formattedDate = new Date(log.timestamp).toLocaleString();
-    
-    logEntry.innerHTML = `
-      <div class="log-header">
-        <span class="log-recipient">${log.recipient}</span>
-        <span class="log-timestamp">${formattedDate}</span>
-      </div>
-      <div class="log-message">${log.message}</div>
-    `;
-    
-    logsContainer.appendChild(logEntry);
-  });
+  // Get logs from Firebase using faculty-specific path
+  firebaseDatabase.getAllMessages()
+    .then(logs => {
+      if (logs.length === 0) {
+        // Display a message if no logs exist
+        logsContainer.innerHTML = '<p class="no-logs">No message logs found.</p>';
+        return;
+      }
+      
+      // Sort logs by timestamp (newest first)
+      logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      // Create log entries
+      logs.forEach(log => {
+        const logEntry = document.createElement('div');
+        logEntry.className = 'log-entry';
+        
+        const formattedDate = new Date(log.timestamp).toLocaleString();
+        
+        logEntry.innerHTML = `
+          <div class="log-header">
+            <span class="log-recipient">${log.recipient || 'N/A'}</span>
+            <span class="log-timestamp">${formattedDate}</span>
+          </div>
+          <div class="log-message">${log.message || 'N/A'}</div>
+        `;
+        
+        logsContainer.appendChild(logEntry);
+      });
+    })
+    .catch(error => {
+      console.error('Error loading message logs:', error);
+      logsContainer.innerHTML = '<p class="error">Error loading messages. Please try again later.</p>';
+    });
 }
 
 // Function to show home screen (main search interface)
