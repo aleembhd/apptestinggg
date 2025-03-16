@@ -406,14 +406,13 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyAAJ8eWUiAE85FmVpbHinlk0_FVGV3JsMQ",
-            authDomain: "ramya-madam-2nd-year-section-2.firebaseapp.com",
-            databaseURL: "https://ramya-madam-2nd-year-section-2-default-rtdb.firebaseio.com",
-            projectId: "ramya-madam-2nd-year-section-2",
-            storageBucket: "ramya-madam-2nd-year-section-2.appspot.com",
-            messagingSenderId: "353573683497",
-            appId: "1:353573683497:web:9453c19843a0b1db7df738"
-        };
+  apiKey: "AIzaSyCs1Wgew-Y1hcY8xIUm9uFagdeByDTDGU0",
+  authDomain: "collegeapp-59309.firebaseapp.com",
+  projectId: "collegeapp-59309",
+  storageBucket: "collegeapp-59309.firebasestorage.app",
+  messagingSenderId: "298826677970",
+  appId: "1:298826677970:web:3989fed84dd5bb4d73f70b"
+};
         
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -434,13 +433,51 @@
             document.getElementById('tableContainer').style.display = 'none';
             document.getElementById('emptyState').style.display = 'none';
             
-            // Get logs from Firebase
-            database.ref('messageLogs').once('value')
+            // Check if we have cached data less than 5 minutes old
+            const cachedData = localStorage.getItem('cachedMessageLogs');
+            const cacheTimestamp = localStorage.getItem('messageCacheTimestamp');
+            
+            if (cachedData && cacheTimestamp && (Date.now() - parseInt(cacheTimestamp)) < 300000) {
+                // Use cached data if it's less than 5 minutes old
+                allLogs = JSON.parse(cachedData);
+                document.getElementById('loadingIndicator').style.display = 'none';
+                displayLogs(allLogs);
+                return;
+            }
+            
+            // Optimize Firebase query - limit to last 100 entries for faster loading
+            database.ref('faculty').limitToLast(100).once('value')
                 .then(snapshot => {
                     allLogs = [];
-                    snapshot.forEach(childSnapshot => {
-                        allLogs.push(childSnapshot.val());
+                    
+                    // Create processing promises array for faster parallel processing
+                    const processingPromises = [];
+                    
+                    snapshot.forEach(facultySnapshot => {
+                        facultySnapshot.forEach(messageSnapshot => {
+                            // Process each message asynchronously
+                            processingPromises.push(new Promise(resolve => {
+                                // Ensure we're dealing with a message object
+                                if (messageSnapshot.val() && typeof messageSnapshot.val() === 'object') {
+                                    // Add faculty information to the log
+                                    const logData = messageSnapshot.val();
+                                    if (!logData.sender) {
+                                        logData.sender = facultySnapshot.key; // Add faculty name as sender if not present
+                                    }
+                                    allLogs.push(logData);
+                                }
+                                resolve();
+                            }));
+                        });
                     });
+                    
+                    // Wait for all processing to complete
+                    return Promise.all(processingPromises);
+                })
+                .then(() => {
+                    // Cache the results for future use
+                    localStorage.setItem('cachedMessageLogs', JSON.stringify(allLogs));
+                    localStorage.setItem('messageCacheTimestamp', Date.now().toString());
                     
                     // Hide loading indicator
                     document.getElementById('loadingIndicator').style.display = 'none';
@@ -482,7 +519,13 @@
             logs.forEach(log => {
                 const row = document.createElement('tr');
                 
-                const timestamp = new Date(log.timestamp).toLocaleString();
+                // Format date as "16 Mar 2025" (day month year) without time
+                const date = new Date(log.timestamp);
+                const timestamp = date.toLocaleDateString('en-US', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
                 
                 row.innerHTML = `
                     <td>${timestamp}</td>
