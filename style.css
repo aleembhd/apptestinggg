@@ -159,9 +159,7 @@ button {
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-button:hover {
-  /* background-color: #1967d2; */
-}
+
 
 button:active {
   transform: scale(0.98);
@@ -851,13 +849,13 @@ font-size: 15px;
 }
 
 .header-text {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
   letter-spacing: 0.5px;
 }
 
 .programs {
-  font-size: 14px;
+  font-size: 11px;
   margin-top: 2px;
 }
 
