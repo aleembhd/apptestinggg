@@ -433,6 +433,10 @@
             document.getElementById('tableContainer').style.display = 'none';
             document.getElementById('emptyState').style.display = 'none';
             
+            // Get the faculty name from the URL or a global variable
+            // You can modify this to get the faculty name as needed
+            const FACULTY_NAME = localStorage.getItem('facultyName') || 'y_srinivasa_rao'; // Default faculty
+            
             // Check if we have cached data less than 5 minutes old
             const cachedData = localStorage.getItem('cachedMessageLogs');
             const cacheTimestamp = localStorage.getItem('messageCacheTimestamp');
@@ -445,36 +449,26 @@
                 return;
             }
             
-            // Optimize Firebase query - limit to last 100 entries for faster loading
-            database.ref('faculty').limitToLast(100).once('value')
+            // Fetch only specific faculty data
+            database.ref(`faculty/${FACULTY_NAME}`).once('value')
                 .then(snapshot => {
                     allLogs = [];
                     
-                    // Create processing promises array for faster parallel processing
-                    const processingPromises = [];
-                    
-                    snapshot.forEach(facultySnapshot => {
-                        facultySnapshot.forEach(messageSnapshot => {
-                            // Process each message asynchronously
-                            processingPromises.push(new Promise(resolve => {
-                                // Ensure we're dealing with a message object
-                                if (messageSnapshot.val() && typeof messageSnapshot.val() === 'object') {
-                                    // Add faculty information to the log
-                                    const logData = messageSnapshot.val();
-                                    if (!logData.sender) {
-                                        logData.sender = facultySnapshot.key; // Add faculty name as sender if not present
-                                    }
-                                    allLogs.push(logData);
-                                }
-                                resolve();
-                            }));
-                        });
+                    snapshot.forEach(messageSnapshot => {
+                        // Add each message to allLogs
+                        const messageData = messageSnapshot.val();
+                        if (messageData && typeof messageData === 'object') {
+                            // Make sure sender is set
+                            if (!messageData.sender) {
+                                messageData.sender = FACULTY_NAME;
+                            }
+                            allLogs.push(messageData);
+                        }
                     });
                     
-                    // Wait for all processing to complete
-                    return Promise.all(processingPromises);
-                })
-                .then(() => {
+                    // Sort logs by timestamp (newest first)
+                    allLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
                     // Cache the results for future use
                     localStorage.setItem('cachedMessageLogs', JSON.stringify(allLogs));
                     localStorage.setItem('messageCacheTimestamp', Date.now().toString());
@@ -527,10 +521,21 @@
                     year: 'numeric' 
                 });
                 
+                // Format phone number to show only the last 10 digits
+                let formattedPhone = log.recipient || 'N/A';
+                if (formattedPhone !== 'N/A') {
+                    // Remove the +91 prefix if present
+                    if (formattedPhone.startsWith('+91')) {
+                        formattedPhone = formattedPhone.substring(3);
+                    }
+                    // Ensure we have only the last 10 digits
+                    formattedPhone = formattedPhone.slice(-10);
+                }
+                
                 row.innerHTML = `
                     <td>${timestamp}</td>
                     <td>${log.sender || 'System'}</td>
-                    <td>${log.recipient || 'N/A'}</td>
+                    <td>${formattedPhone}</td>
                     <td>${log.studentName || 'N/A'}</td>
                     <td>${log.studentRoll || 'N/A'}</td>
                     <td>${log.parentName || 'N/A'}</td>
